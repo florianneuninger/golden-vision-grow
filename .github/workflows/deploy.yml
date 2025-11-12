@@ -1,63 +1,92 @@
-name: Build & Deploy to IONOS (SSH)
-
-on:
-  push:
-    branches: [ main ]
-
 env:
-  BUILD_DIR: dist
+  BUILD_DIR: dist  # <-- change to 'build' if CRA
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Node & Cache
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install
-        run: npm ci --no-audit --no-fund
+        run: |
+          set -euxo pipefail
+          npm ci --no-audit --no-fund
 
       - name: Build
-        run: npm run build
+        run: |
+          set -euxo pipefail
+          npm run build
+          echo "Listing build output:"
+          ls -lah "${{ env.BUILD_DIR }}" || (echo "::error::BUILD_DIR '${{ env.BUILD_DIR }}' not found" && exit 2)
+
+      - name: Show env (sanitized)
+        run: |
+          set -euxo pipefail
+          echo "BUILD_DIR=${{ env.BUILD_DIR }}"
+          echo "SSH_HOST set? ${{ secrets.SSH_HOST != '' }}"
+          echo "SSH_USER set? ${{ secrets.SSH_USER != '' }}"
+          echo "SSH_PORT set? ${{ secrets.SSH_PORT != '' }}"
+          echo "REMOTE_PATH set? ${{ secrets.REMOTE_PATH != '' }}"
+          echo "SSH_PRIVATE_KEY set? ${{ secrets.SSH_PRIVATE_KEY != '' }}"
 
       - name: Prepare SSH
         run: |
+          set -euxo pipefail
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
+          ssh-keygen -l -f ~/.ssh/id_deploy || (echo "::error::Invalid SSH key format"; exit 2)
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-      - name: Ensure remote path exists
+      - name: Test SSH connectivity (no command)
         run: |
+          set -euxo pipefail
+          ssh -vvv -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
+            -o BatchMode=yes -o ConnectTimeout=15 \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" true
+
+      - name: Ensure remote path
+        run: |
+          set -euxo pipefail
           ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "mkdir -p '${{ secrets.REMOTE_PATH }}'"
+            "mkdir -p '${{ secrets.REMOTE_PATH }}' && ls -ld '${{ secrets.REMOTE_PATH }}'"
 
-      - name: Deploy (rsync else scp)
+      - name: Deploy (rsync else scp) with verbose logs
         run: |
-          set -e
+          set -euxo pipefail
           if ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
                "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "command -v rsync >/dev/null 2>&1"; then
             echo "Using rsync"
-            rsync -az --delete \
+            rsync -azvv --delete \
               --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
+              --exclude='.htaccess' \
               -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy" \
               "${{ env.BUILD_DIR }}"/ \
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/"
           else
-            echo "rsync not found, using scp"
+            echo "rsync not found on remote, using scp"
             ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
               "find '${{ secrets.REMOTE_PATH }}' -mindepth 1 -maxdepth 1 ! -name '.htaccess' -exec rm -rf {} +"
-            scp -P "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy -r \
+            scp -vv -P "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy -r \
               "${{ env.BUILD_DIR }}"/* \
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/"
           fi
+
+      # Always show a final directory listing on the server (even if earlier step failed)
+      - name: Remote listing (post)
+        if: ${{ always() }}
+        run: |
+          set -euxo pipefail
+          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "echo 'Remote tree:' && ls -lah '${{ secrets.REMOTE_PATH }}' || true"
