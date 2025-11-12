@@ -29,7 +29,7 @@ const Index = () => {
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-                Ihr Vermögen in <span className="text-primary">goldenen Händen</span>
+                Ihr Vermögen in <span className="text-primary">goldenen Händen lol</span>
               </h1>
               <p className="text-xl text-muted-foreground">
                 Marlene Holzer – Ihre persönliche Vermögensberaterin für eine sichere finanzielle Zukunft
