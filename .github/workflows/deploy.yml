@@ -57,7 +57,7 @@ jobs:
           set -euxo pipefail
           ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "mkdir -p '${{ secrets.REMOTE_PATH }}' && ls -ld '${{ secrets.REMOTE_PATH }}'"
+            'mkdir -p "$HOME/${{ secrets.REMOTE_PATH }}" && ls -ld "$HOME/${{ secrets.REMOTE_PATH }}"'
 
       - name: Deploy (rsync else scp) — verbose
         run: |
@@ -69,17 +69,17 @@ jobs:
               --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
               -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_deploy" \
               "${{ env.BUILD_DIR }}/" \
-              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/"
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$HOME/${{ secrets.REMOTE_PATH }}/"
           else
             echo "rsync not found, using scp"
             ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy \
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-              "find '${{ secrets.REMOTE_PATH }}' -mindepth 1 -maxdepth 1 ! -name '.htaccess' -exec rm -rf {} +"
+              'find "$HOME/${{ secrets.REMOTE_PATH }}" -mindepth 1 -maxdepth 1 ! -name ".htaccess" -exec rm -rf {} +'
             # If BUILD_DIR is empty, scp will error. This guard makes it obvious.
             test -n "$(ls -A "${{ env.BUILD_DIR }}" 2>/dev/null)" || (echo "::error::'${{ env.BUILD_DIR }}' is empty" && exit 1)
             scp -vv -P "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_deploy -r \
               "${{ env.BUILD_DIR }}"/* \
-              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/"
+             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$HOME/${{ secrets.REMOTE_PATH }}/"
           fi
 
       - name: Post-remote listing (always)
