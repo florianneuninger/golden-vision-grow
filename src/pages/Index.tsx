@@ -2,13 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, TrendingUp, Shield, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import marleneHero from "@/assets/marlene-hero.jpg";
 import logoGoldenVision from "@/assets/logo-golden-vision.png";
+import footerLogo from "@/assets/footer-logo.png";
 
 const Index = () => {
   const scrollToCalendly = () => {
     document.getElementById('calendly')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -257,7 +263,7 @@ const Index = () => {
           <div className="grid gap-8 md:grid-cols-2">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src={logoGoldenVision} alt="Golden Vision Logo" className="h-10 w-auto" />
+                <img src={footerLogo} alt="Golden Vision Logo" className="h-10 w-auto" />
               </div>
               <p className="text-background/80 mb-4">
                 Golden Vision - Ihr persönliches Expertenteam für finanzielle Sicherheit und Wachstum.

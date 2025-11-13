@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Mail, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import logoGoldenVision from "@/assets/logo-golden-vision.png";
+import footerLogo from "@/assets/footer-logo.png";
 
 const Impressum = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -162,8 +168,11 @@ const Impressum = () => {
 
       {/* Footer */}
       <footer className="bg-foreground text-background py-8 mt-12">
-        <div className="container px-4 text-center">
-          <p className="text-background/60">&copy; 2025 Golden Vision. Alle Rechte vorbehalten.</p>
+        <div className="container px-4">
+          <div className="flex justify-center mb-4">
+            <img src={footerLogo} alt="Golden Vision Logo" className="h-10 w-auto" />
+          </div>
+          <p className="text-background/60 text-center">&copy; 2025 Golden Vision. Alle Rechte vorbehalten.</p>
         </div>
       </footer>
     </div>
