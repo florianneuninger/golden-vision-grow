@@ -29,10 +29,10 @@ const Index = () => {
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-                Ihr Vermögen in <span className="text-primary">goldenen Händen</span>
+                Vertrauen Sie auf Erfahrung, die <span className="text-primary">Werte schafft</span>
               </h1>
               <p className="text-xl text-muted-foreground">
-                Marlene Holzer – Ihre persönliche Vermögensberaterin für eine sichere finanzielle Zukunft
+                Golden Vision - Ihr persönliches Expertenteam für finanzielle Sicherheit und Wachstum.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button onClick={scrollToCalendly} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg">
@@ -73,7 +73,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Sicherheit & Vertrauen</h3>
                 <p className="text-muted-foreground">
-                  Über 15 Jahre Erfahrung in der Vermögensberatung mit höchsten Sicherheitsstandards
+                  Seit Jahren ihre verlässlichen Partner für sichere Finanzentscheidungen
                 </p>
               </CardContent>
             </Card>
@@ -85,7 +85,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Individuelle Beratung</h3>
                 <p className="text-muted-foreground">
-                  Maßgeschneiderte Lösungen für Ihre persönliche finanzielle Situation
+                  Maßgeschneiderte Lösungen für Ihre persönlichen Wünsche und Ziele
                 </p>
               </CardContent>
             </Card>
@@ -95,26 +95,22 @@ const Index = () => {
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <TrendingUp className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Nachhaltige Rendite</h3>
+                <h3 className="text-xl font-bold mb-2">Transparenz & Nachvollziehbarkeit</h3>
                 <p className="text-muted-foreground">
-                  Durchschnittlich 8,5% Rendite pro Jahr durch kluge Anlagestrategien
+                  Klare, verständliche Beratung ohne Fachchinesisch.
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <div className="text-center">
               <div className="text-4xl font-bold text-primary mb-2">500+</div>
               <div className="text-muted-foreground">Zufriedene Kunden</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">€50M+</div>
-              <div className="text-muted-foreground">Verwaltetes Vermögen</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">15+</div>
-              <div className="text-muted-foreground">Jahre Erfahrung</div>
+              <div className="text-4xl font-bold text-primary mb-2">150+</div>
+              <div className="text-muted-foreground">Kooperationspartner</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-primary mb-2">98%</div>
@@ -138,12 +134,11 @@ const Index = () => {
           
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
-              "Ganzheitliche Finanzplanung",
+              "Finanz-Check & Optimierung",
               "Vermögensaufbau & Altersvorsorge",
               "Steueroptimierte Anlagestrategien",
-              "Immobilieninvestments",
-              "Risikomanagement & Absicherung",
-              "Nachfolgeplanung"
+              "Finanzierungslösungen für Ihr Eigenheim",
+              "Sicherheitsstrategien & Vermögensschutz"
             ].map((service) => (
               <div key={service} className="flex items-start gap-3 bg-background p-6 rounded-lg border border-border">
                 <Check className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
