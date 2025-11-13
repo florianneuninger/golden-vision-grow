@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, TrendingUp, Shield, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import marleneHero from "@/assets/marlene-hero.jpg";
 import logoGoldenVision from "@/assets/logo-golden-vision.png";
 
@@ -272,40 +273,11 @@ const Index = () => {
               </div>
             </div>
           </div>
-
-          <div className="mt-8 pt-8 border-t border-background/20">
-            <h3 className="font-bold mb-4 text-primary">Impressum</h3>
-            <div className="text-background/80 space-y-2 text-sm">
-              <p>Marlene Holzner</p>
-              <p>Arthur Schnitzler Straße 29</p>
-              <p>3300 Amstetten</p>
-              <p>Telefon: +43 6503477726</p>
-              <p>E-Mail: Marlene.Holzner@dvag.at</p>
-              <p>Internet: www.dvag.at/Marlene.Holzner</p>
-              
-              <p className="pt-4">
-                Die Vermögensberater nehmen keine Kundengelder entgegen. Zahlungen erfolgen direkt von den Kunden an die jeweiligen Produktpartner.
-              </p>
-              
-              <p className="pt-4">
-                <strong>Haftungshinweis:</strong> Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
-              </p>
-              
-              <div className="pt-4">
-                <p><strong>Gewerbescheinverweise:</strong></p>
-                <p>Versicherungsagent im Auftrag der Deutschen Vermögensberatung Bank AG für die Generali Versicherung AG: GISA-Zahl: 35583578</p>
-                <p>Vermögensberater gemäß § 94 Z 75 GewO mit der Berechtigung zur Vermittlung von Lebens- und Unfallversicherungen im Auftrag der Deutschen Vermögensberatung Bank AG als Versicherungsagent der Generali Versicherung AG: GISA-Zahl: 36720170</p>
-                <p>Ungebundener Kreditvermittler ausschließlich für die Produktpartner (siehe www.dvag.at) der Deutsche Vermögensberatung Bank Aktiengesellschaft</p>
-                <p>Mitglied der Wirtschaftskammer Österreich</p>
-              </div>
-              
-              <p className="pt-4">
-                <strong>Wesentliche gewerbe- und berufsrechtliche Vorschriften:</strong> Wertpapieraufsichtsgesetz, Gewerbeordnung, Handelsvertretergesetz, Konsumentenschutzgesetz, Telekommunikationsgesetz, Versicherungsvertragsgesetz, Verbraucherkreditgesetz Hypothekar- und Immobilienkreditgesetz.
-              </p>
-              <p>
-                Die jeweils aktuelle Version der Rechtsvorschriften ist über die kostenlos zugängliche Website des RIS des Bundeskanzleramtes <a href="http://www.ris.bka.gv.at" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">http://www.ris.bka.gv.at</a> abrufbar.
-              </p>
-            </div>
+          
+          <div className="mt-8 pt-8 border-t border-background/20 text-center">
+            <Link to="/impressum" className="text-primary hover:underline font-semibold">
+              Impressum
+            </Link>
           </div>
           
           <div className="mt-8 pt-8 border-t border-background/20 text-center text-background/60">
