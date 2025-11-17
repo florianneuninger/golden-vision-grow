@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Check, TrendingUp, Shield, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import marleneHero from "@/assets/marlene-hero.jpg";
+import teamHero from "@/assets/team-hero.jpg";
 import logoGoldenVision from "@/assets/logo-golden-vision.png";
 import footerLogo from "@/assets/footer-logo.png";
 
@@ -73,8 +73,8 @@ const Index = () => {
             <div className="relative">
               <div className="aspect-square overflow-hidden rounded-2xl border-4 border-primary shadow-2xl">
                 <img
-                  src={marleneHero}
-                  alt="Marlene Holzner - Vermögensberaterin"
+                  src={teamHero}
+                  alt="Golden Vision Team - Ihr Expertenteam für Vermögensberatung"
                   className="h-full w-full object-cover"
                 />
               </div>
