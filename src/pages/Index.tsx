@@ -7,6 +7,29 @@ import marleneHero from "@/assets/marlene-hero.jpg";
 import logoGoldenVision from "@/assets/logo-golden-vision.png";
 import footerLogo from "@/assets/footer-logo.png";
 
+const TaggboxWidget = () => {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://widget.taggbox.com/embed.min.js";
+    script.type = "text/javascript";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return (
+    <div
+      className="taggbox"
+      style={{ width: "100%", height: "600px", overflow: "auto" }}
+      data-widget-id="307655"
+      data-website="1"
+    ></div>
+  );
+};
+
 const Index = () => {
   const scrollToCalendly = () => {
     document.getElementById('calendly')?.scrollIntoView({ behavior: 'smooth' });
@@ -169,8 +192,7 @@ const Index = () => {
           </div>
           
           <div className="w-full">
-            <div className="taggbox" style={{width: '100%', height: '600px', overflow: 'auto'}} data-widget-id="307655" data-website="1"></div>
-            <script src="https://widget.taggbox.com/embed.min.js" type="text/javascript"></script>
+            <TaggboxWidget />
           </div>
         </div>
       </section>
