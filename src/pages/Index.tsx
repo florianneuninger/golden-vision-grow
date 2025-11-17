@@ -212,7 +212,7 @@ const Index = () => {
           <div className="max-w-4xl mx-auto bg-background rounded-lg border-2 border-primary p-8 shadow-xl">
             <div className="aspect-[16/9] w-full">
               <iframe
-                src="https://calendly.com/your-calendly-link"
+                src="https://calendly.com/m-h9-9/30min?back=1&month=2025-11"
                 width="100%"
                 height="100%"
                 frameBorder="0"
@@ -220,9 +220,6 @@ const Index = () => {
                 className="rounded-lg"
               ></iframe>
             </div>
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              Bitte ersetzen Sie den Calendly-Link mit Ihrem persönlichen Link
-            </p>
           </div>
         </div>
       </section>
