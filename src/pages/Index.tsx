@@ -168,61 +168,9 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="border-2 border-border">
-              <CardContent className="pt-6">
-                <div className="mb-4">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-primary text-xl">★</span>
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    "Frau Holzer hat mir geholfen, mein Vermögen optimal zu strukturieren. 
-                    Die Beratung war professionell und sehr persönlich. Ich fühle mich endlich 
-                    sicher für meine Zukunft."
-                  </p>
-                  <div className="font-semibold">Michael Schmidt</div>
-                  <div className="text-sm text-muted-foreground">Unternehmer, München</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-border">
-              <CardContent className="pt-6">
-                <div className="mb-4">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-primary text-xl">★</span>
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    "Die individuelle Betreuung und die transparenten Strategien haben mich 
-                    überzeugt. Meine Rendite hat sich seit der Zusammenarbeit deutlich verbessert."
-                  </p>
-                  <div className="font-semibold">Sarah Weber</div>
-                  <div className="text-sm text-muted-foreground">Ärztin, Stuttgart</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-border">
-              <CardContent className="pt-6">
-                <div className="mb-4">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-primary text-xl">★</span>
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    "Kompetent, zuverlässig und immer erreichbar. Frau Holzer nimmt sich Zeit 
-                    für ihre Kunden und findet immer die beste Lösung. Absolute Empfehlung!"
-                  </p>
-                  <div className="font-semibold">Thomas Müller</div>
-                  <div className="text-sm text-muted-foreground">IT-Manager, Frankfurt</div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="w-full">
+            <div className="taggbox" style={{width: '100%', height: '600px', overflow: 'auto'}} data-widget-id="307655" data-website="1"></div>
+            <script src="https://widget.taggbox.com/embed.min.js" type="text/javascript"></script>
           </div>
         </div>
       </section>
