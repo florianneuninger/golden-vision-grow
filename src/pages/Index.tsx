@@ -71,11 +71,11 @@ const Index = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square overflow-hidden rounded-2xl border-4 border-primary shadow-2xl">
+              <div className="overflow-hidden rounded-2xl border-4 border-primary shadow-2xl">
                 <img
                   src={teamHero}
                   alt="Golden Vision Team - Ihr Expertenteam für Vermögensberatung"
-                  className="h-full w-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
               </div>
             </div>
