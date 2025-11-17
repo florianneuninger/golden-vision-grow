@@ -210,11 +210,11 @@ const Index = () => {
           </div>
           
           <div className="max-w-4xl mx-auto bg-background rounded-lg border-2 border-primary p-8 shadow-xl">
-            <div className="aspect-[16/9] w-full">
+            <div className="w-full min-h-[900px]">
               <iframe
                 src="https://calendly.com/m-h9-9/30min?back=1&month=2025-11"
                 width="100%"
-                height="100%"
+                height="900"
                 frameBorder="0"
                 title="Calendly Terminbuchung"
                 className="rounded-lg"
