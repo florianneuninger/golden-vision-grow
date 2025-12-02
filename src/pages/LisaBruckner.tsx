@@ -11,9 +11,13 @@ import { Volume2, VolumeX } from "lucide-react";
 const LisaBruckner = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+
   const [isMuted, setIsMuted] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [formData, setFormData] = useState({
     vorname: "",
@@ -32,17 +36,38 @@ const LisaBruckner = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!formData.vorname || !formData.nachname || !formData.telefon || !formData.email) {
+  const validateStep = () => {
+    if (currentStep === 1) {
+      return formData.vorname.trim() && formData.nachname.trim();
+    } else if (currentStep === 2) {
+      return (
+        formData.telefon.trim() &&
+        formData.email.trim() &&
+        formData.email.includes("@")
+      );
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (!validateStep()) {
       toast({
         title: "Fehler",
-        description: "Bitte fülle alle Pflichtfelder aus.",
+        description: "Bitte fülle alle Pflichtfelder korrekt aus.",
         variant: "destructive",
       });
       return;
     }
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const handlePrev = () => setCurrentStep((prev) => prev - 1);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
     try {
+      setIsLoading(true);
       await supabase.functions.invoke("send-lisa-contact", { body: formData });
       navigate("/lisabruckner/success");
     } catch (error) {
@@ -52,6 +77,8 @@ const LisaBruckner = () => {
         description: "Es gab ein Problem beim Senden.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,7 +87,6 @@ const LisaBruckner = () => {
 
     setIsMuted((prev) => {
       const newValue = !prev;
-
       iframeRef.current.contentWindow?.postMessage(
         JSON.stringify({
           method: "setVolume",
@@ -68,12 +94,10 @@ const LisaBruckner = () => {
         }),
         "*"
       );
-
       return newValue;
     });
   };
 
-  // Vimeo Embed URL (best quality, autoplay)
   const vimeoUrl = `https://player.vimeo.com/video/1142455584?autoplay=1&muted=1&loop=1&controls=0&transparent=0`;
 
   return (
@@ -113,83 +137,152 @@ const LisaBruckner = () => {
       {/* Contact Form Section */}
       <section className="py-12 px-4">
         <div className="max-w-md mx-auto">
+          {/* Social Proof + Knappheit */}
+          <p className="text-sm text-muted-foreground mb-2">
+            Über <strong>500 Anfragen</strong> wurden bereits erfolgreich bearbeitet!
+          </p>
+          <p className="text-sm text-red-500 mb-4">
+            Schnell! Nur noch wenige Termine im Monat verfügbar.
+          </p>
+
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-foreground">
             Interesse geweckt?
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="vorname">Vorname *</Label>
-                <Input
-                  id="vorname"
-                  name="vorname"
-                  value={formData.vorname}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Max"
-                />
+            {/* Step 1 */}
+            {currentStep === 1 && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="vorname">Vorname *</Label>
+                    <Input
+                      id="vorname"
+                      name="vorname"
+                      value={formData.vorname}
+                      onChange={handleInputChange}
+                      placeholder="Max"
+                      autoFocus
+                    />
+                    {!formData.vorname.trim() && (
+                      <p className="text-red-500 text-sm">Vorname ist Pflicht</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="nachname">Nachname *</Label>
+                    <Input
+                      id="nachname"
+                      name="nachname"
+                      value={formData.nachname}
+                      onChange={handleInputChange}
+                      placeholder="Mustermann"
+                    />
+                    {!formData.nachname.trim() && (
+                      <p className="text-red-500 text-sm">Nachname ist Pflicht</p>
+                    )}
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  onClick={handleNext}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  Weiter
+                </Button>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="nachname">Nachname *</Label>
-                <Input
-                  id="nachname"
-                  name="nachname"
-                  value={formData.nachname}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Mustermann"
-                />
+            )}
+
+            {/* Step 2 */}
+            {currentStep === 2 && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="telefon">Telefonnummer *</Label>
+                  <Input
+                    id="telefon"
+                    name="telefon"
+                    type="tel"
+                    value={formData.telefon}
+                    onChange={handleInputChange}
+                    placeholder="+43 660 1234567"
+                  />
+                  {!formData.telefon.trim() && (
+                    <p className="text-red-500 text-sm">Telefon ist Pflicht</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">E-Mail *</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="max@beispiel.at"
+                  />
+                  {(!formData.email.includes("@") || !formData.email.trim()) && (
+                    <p className="text-red-500 text-sm">Bitte gib eine gültige E-Mail ein</p>
+                  )}
+                </div>
+
+                <div className="flex justify-between">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handlePrev}
+                    className="w-1/2"
+                  >
+                    Zurück
+                  </Button>
+
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    className="w-1/2 ml-2 bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all duration-200 shadow-md hover:shadow-lg"
+                  >
+                    Weiter
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="telefon">Telefonnummer *</Label>
-              <Input
-                id="telefon"
-                name="telefon"
-                type="tel"
-                value={formData.telefon}
-                onChange={handleInputChange}
-                required
-                placeholder="+43 660 1234567"
-              />
-            </div>
+            {/* Step 3 */}
+            {currentStep === 3 && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nachricht">Nachricht (optional)</Label>
+                  <Textarea
+                    id="nachricht"
+                    name="nachricht"
+                    value={formData.nachricht}
+                    onChange={handleInputChange}
+                    placeholder="Deine Nachricht..."
+                    rows={4}
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">E-Mail *</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="max@beispiel.at"
-              />
-            </div>
+                <div className="flex justify-between">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handlePrev}
+                    className="w-1/2"
+                  >
+                    Zurück
+                  </Button>
 
-            <div className="space-y-2">
-              <Label htmlFor="nachricht">Nachricht (optional)</Label>
-              <Textarea
-                id="nachricht"
-                name="nachricht"
-                value={formData.nachricht}
-                onChange={handleInputChange}
-                placeholder="Deine Nachricht..."
-                rows={4}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full"
-              size="lg"
-              disabled={isLoading}
-            >
-              {isLoading ? "Wird gesendet..." : "Absenden"}
-            </Button>
-        
+                  <Button
+                    type="submit"
+                    className="w-1/2 ml-2 bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all duration-200 shadow-md hover:shadow-lg"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Wird gesendet..." : "Jetzt Kontakt aufnehmen"}
+                  </Button>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </section>
@@ -198,5 +291,3 @@ const LisaBruckner = () => {
 };
 
 export default LisaBruckner;
-
-            
