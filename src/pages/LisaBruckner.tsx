@@ -23,7 +23,6 @@ const LisaBruckner = () => {
     vorname: "",
     nachname: "",
     telefon: "",
-    email: "",
     nachricht: "",
   });
 
@@ -40,11 +39,7 @@ const LisaBruckner = () => {
     if (currentStep === 1) {
       return formData.vorname.trim() && formData.nachname.trim();
     } else if (currentStep === 2) {
-      return (
-        formData.telefon.trim() &&
-        formData.email.trim() &&
-        formData.email.includes("@")
-      );
+      return formData.telefon.trim();
     }
     return true;
   };
@@ -138,11 +133,10 @@ const LisaBruckner = () => {
       <section className="py-12 px-4">
         <div className="max-w-md mx-auto">
 
-
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-foreground">
             Interesse geweckt?
           </h2>
-                    <p className="text-sm text-center text-red-500 mb-4">
+          <p className="text-sm text-center text-red-500 mb-4">
             Nur noch wenige Termine im Monat verfügbar.
           </p>
 
@@ -209,30 +203,6 @@ const LisaBruckner = () => {
                   )}
                 </div>
 
-                <div className="flex justify-between">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={handlePrev}
-                    className="w-1/2"
-                  >
-                    Zurück
-                  </Button>
-
-                  <Button
-                    type="button"
-                    onClick={handleNext}
-                    className="w-1/2 ml-2 bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all duration-200 shadow-md hover:shadow-lg"
-                  >
-                    Weiter
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3 */}
-            {currentStep === 3 && (
-              <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="nachricht">Nachricht (optional)</Label>
                   <Textarea
