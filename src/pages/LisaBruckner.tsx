@@ -117,7 +117,78 @@ const LisaBruckner = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* your form fields */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="vorname">Vorname *</Label>
+                <Input
+                  id="vorname"
+                  name="vorname"
+                  value={formData.vorname}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Max"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nachname">Nachname *</Label>
+                <Input
+                  id="nachname"
+                  name="nachname"
+                  value={formData.nachname}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Mustermann"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="telefon">Telefonnummer *</Label>
+              <Input
+                id="telefon"
+                name="telefon"
+                type="tel"
+                value={formData.telefon}
+                onChange={handleInputChange}
+                required
+                placeholder="+43 660 1234567"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">E-Mail *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder="max@beispiel.at"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="nachricht">Nachricht (optional)</Label>
+              <Textarea
+                id="nachricht"
+                name="nachricht"
+                value={formData.nachricht}
+                onChange={handleInputChange}
+                placeholder="Deine Nachricht..."
+                rows={4}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Wird gesendet..." : "Absenden"}
+            </Button>
+        
           </form>
         </div>
       </section>
