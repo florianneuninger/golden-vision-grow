@@ -137,14 +137,14 @@ const LisaBruckner = () => {
       {/* Contact Form Section */}
       <section className="py-12 px-4">
         <div className="max-w-md mx-auto">
-          {/* Social Proof + Knappheit */}
-          <p className="text-sm text-red-500 mb-4">
-            Schnell! Nur noch wenige Termine im Monat verfügbar.
-          </p>
+
 
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-foreground">
             Interesse geweckt?
           </h2>
+                    <p className="text-sm text-center text-red-500 mb-4">
+            Nur noch wenige Termine im Monat verfügbar.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Step 1 */}
@@ -206,21 +206,6 @@ const LisaBruckner = () => {
                   />
                   {!formData.telefon.trim() && (
                     <p className="text-red-500 text-sm">Telefon ist Pflicht</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">E-Mail *</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="max@beispiel.at"
-                  />
-                  {(!formData.email.includes("@") || !formData.email.trim()) && (
-                    <p className="text-red-500 text-sm">Bitte gib eine gültige E-Mail ein</p>
                   )}
                 </div>
 
