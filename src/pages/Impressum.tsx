@@ -173,6 +173,11 @@ const Impressum = () => {
             <img src={footerLogo} alt="Golden Vision Logo" className="h-10 w-auto" />
           </div>
           <p className="text-background/60 text-center">&copy; 2025 Golden Vision. Alle Rechte vorbehalten.</p>
+          <div className="text-center mt-4">
+            <Link to="/lisabruckner" className="text-background/40 text-xs hover:text-background/60 transition-colors">
+              Lisa Bruckner
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
