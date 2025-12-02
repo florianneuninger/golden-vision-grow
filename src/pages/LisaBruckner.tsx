@@ -79,8 +79,7 @@ const LisaBruckner = () => {
   };
 
   // YouTube embed URL with autoplay and controls hidden
-  const youtubeUrl = `https://www.youtube.com/embed/oFkA0T9EdaI?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&loop=1&playlist=oFkA0T9EdaI&playsinline=1&rel=0&modestbranding=1&showinfo=0`;
-
+  const vimeoUrl = `https://player.vimeo.com/video/1142455584?autoplay=1&muted=0&loop=1&controls=0&transparent=0`;
   return (
     <div className="min-h-screen bg-background">
       {/* Video Section */}
@@ -94,7 +93,7 @@ const LisaBruckner = () => {
         <div className="relative w-full max-w-md mx-auto aspect-[9/16]">
           <iframe
             ref={iframeRef}
-            src={youtubeUrl}
+            src={vimeoUrl}
             className="w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
