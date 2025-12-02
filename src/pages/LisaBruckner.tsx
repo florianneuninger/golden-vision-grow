@@ -1,0 +1,204 @@
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+
+const LisaBruckner = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const [formData, setFormData] = useState({
+    vorname: "",
+    nachname: "",
+    telefon: "",
+    email: "",
+    nachricht: "",
+  });
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.vorname || !formData.nachname || !formData.telefon || !formData.email) {
+      toast({
+        title: "Fehler",
+        description: "Bitte fülle alle Pflichtfelder aus.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.functions.invoke("send-lisa-contact", {
+        body: formData,
+      });
+
+      if (error) throw error;
+
+      navigate("/lisabruckner/success");
+    } catch (error) {
+      console.error("Error sending contact form:", error);
+      toast({
+        title: "Fehler",
+        description: "Es gab ein Problem beim Senden. Bitte versuche es erneut.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
+  // YouTube embed URL with autoplay and controls hidden
+  const youtubeUrl = `https://www.youtube.com/embed/oFkA0T9EdaI?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&loop=1&playlist=oFkA0T9EdaI&playsinline=1&rel=0&modestbranding=1&showinfo=0`;
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Video Section */}
+      <section className="w-full">
+        <div className="text-center pt-6 pb-4 px-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
+            Ich bin Lisa Bruckner
+          </h1>
+        </div>
+        
+        <div className="relative w-full max-w-md mx-auto aspect-[9/16]">
+          <iframe
+            ref={iframeRef}
+            src={youtubeUrl}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Lisa Bruckner Video"
+          />
+          
+          {/* Custom Controls Overlay */}
+          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={toggleMute}
+              className="bg-background/80 hover:bg-background/90 backdrop-blur-sm"
+            >
+              {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className="py-12 px-4">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-foreground">
+            Interesse geweckt?
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="vorname">Vorname *</Label>
+                <Input
+                  id="vorname"
+                  name="vorname"
+                  value={formData.vorname}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Max"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nachname">Nachname *</Label>
+                <Input
+                  id="nachname"
+                  name="nachname"
+                  value={formData.nachname}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Mustermann"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="telefon">Telefonnummer *</Label>
+              <Input
+                id="telefon"
+                name="telefon"
+                type="tel"
+                value={formData.telefon}
+                onChange={handleInputChange}
+                required
+                placeholder="+43 660 1234567"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">E-Mail *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder="max@beispiel.at"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="nachricht">Nachricht (optional)</Label>
+              <Textarea
+                id="nachricht"
+                name="nachricht"
+                value={formData.nachricht}
+                onChange={handleInputChange}
+                placeholder="Deine Nachricht..."
+                rows={4}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Wird gesendet..." : "Absenden"}
+            </Button>
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default LisaBruckner;
