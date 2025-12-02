@@ -12,6 +12,7 @@ const LisaBruckner = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isMuted, setIsMuted] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const [formData, setFormData] = useState({
