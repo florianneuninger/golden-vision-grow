@@ -1,1 +1,4 @@
 project_id = "pljttfmjfvoekfpkdenk"
+
+[functions.send-lisa-contact]
+verify_jwt = false
