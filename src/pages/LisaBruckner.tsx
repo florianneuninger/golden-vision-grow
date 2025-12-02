@@ -138,9 +138,6 @@ const LisaBruckner = () => {
       <section className="py-12 px-4">
         <div className="max-w-md mx-auto">
           {/* Social Proof + Knappheit */}
-          <p className="text-sm text-muted-foreground mb-2">
-            Über <strong>500 Anfragen</strong> wurden bereits erfolgreich bearbeitet!
-          </p>
           <p className="text-sm text-red-500 mb-4">
             Schnell! Nur noch wenige Termine im Monat verfügbar.
           </p>
