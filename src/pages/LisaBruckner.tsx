@@ -6,14 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 
 const LisaBruckner = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const [formData, setFormData] = useState({
@@ -24,21 +22,17 @@ const LisaBruckner = () => {
     nachricht: "",
   });
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     if (!formData.vorname || !formData.nachname || !formData.telefon || !formData.email) {
       toast({
         title: "Fehler",
@@ -47,39 +41,40 @@ const LisaBruckner = () => {
       });
       return;
     }
-
-    setIsLoading(true);
-
     try {
-      const { error } = await supabase.functions.invoke("send-lisa-contact", {
-        body: formData,
-      });
-
-      if (error) throw error;
-
+      await supabase.functions.invoke("send-lisa-contact", { body: formData });
       navigate("/lisabruckner/success");
     } catch (error) {
-      console.error("Error sending contact form:", error);
+      console.error(error);
       toast({
         title: "Fehler",
-        description: "Es gab ein Problem beim Senden. Bitte versuche es erneut.",
+        description: "Es gab ein Problem beim Senden.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
   const toggleMute = () => {
-    setIsMuted(!isMuted);
+    if (!iframeRef.current) return;
+
+    setIsMuted((prev) => {
+      const newValue = !prev;
+
+      iframeRef.current.contentWindow?.postMessage(
+        JSON.stringify({
+          method: "setVolume",
+          value: newValue ? 0 : 1,
+        }),
+        "*"
+      );
+
+      return newValue;
+    });
   };
 
-  // YouTube embed URL with autoplay and controls hidden
-  const vimeoUrl = `https://player.vimeo.com/video/1142455584?autoplay=1&muted=0&loop=1&controls=0&transparent=0`;
+  // Vimeo Embed URL (best quality, autoplay)
+  const vimeoUrl = `https://player.vimeo.com/video/1142455584?autoplay=1&muted=1&loop=1&controls=0&transparent=0`;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Video Section */}
@@ -89,18 +84,18 @@ const LisaBruckner = () => {
             Ich bin Lisa Bruckner
           </h1>
         </div>
-        
+
         <div className="relative w-full max-w-md mx-auto aspect-[9/16]">
           <iframe
             ref={iframeRef}
             src={vimeoUrl}
             className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
             title="Lisa Bruckner Video"
           />
-          
-          {/* Custom Controls Overlay */}
+
+          {/* Mute Button */}
           <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
             <Button
               variant="secondary"
@@ -122,7 +117,7 @@ const LisaBruckner = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+           <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="vorname">Vorname *</Label>
                 <Input
@@ -193,6 +188,7 @@ const LisaBruckner = () => {
             >
               {isLoading ? "Wird gesendet..." : "Absenden"}
             </Button>
+          
           </form>
         </div>
       </section>
@@ -201,3 +197,5 @@ const LisaBruckner = () => {
 };
 
 export default LisaBruckner;
+
+            
