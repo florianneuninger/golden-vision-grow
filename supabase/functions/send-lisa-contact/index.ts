@@ -45,7 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "Golden Vision <onboarding@resend.dev>",
-        to: ["hey@neuninger.com", "lisa.19.07.b@gmail.com"],
+        to: ["hey@neuninger.com"],
         subject: `Neue Kontaktanfrage von ${vorname} ${nachname}`,
         html: emailContent,
         reply_to: email,
